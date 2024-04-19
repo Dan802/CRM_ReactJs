@@ -14,20 +14,23 @@ const Customers = () => {
     // saveCustomers = function to save the state
     const [customers, saveCustomers] = useState([])
 
-    // We call the API (Query to API)
-    const queryAPI = async () => {
-        const customersQuery = await clientAxios.get('/customers')
-
-        // add the result to the state
-        saveCustomers(customersQuery.data)
-    }
-
     // use effect is similar to componentdidmount and willmount
     // it runs automatically when the user open the route file 
     // useEffect always should call a function/method apart 
     useEffect(() => {
+
+        // We call the API (Query to API)
+        const queryAPI = async () => {
+            const customersQuery = await clientAxios.get('/customers')
+
+            // add the result to the state
+            saveCustomers(customersQuery.data)
+        }
+
         queryAPI()
-    }, [])
+
+        // When customers state change (edit, delete...) runs again queryAPI()
+    }, [customers])
 
     return(
         <Fragment>

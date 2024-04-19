@@ -36,7 +36,6 @@ function EditCustomer(props) {
         queryAPI()
     }, [])
 
-
     // Obtain Id Customer from URL
     const { id } = props.match.params
 

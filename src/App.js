@@ -18,8 +18,8 @@ function App() {
   return(
     <Router>
 
-    {/* Fragment: To include different elements */}
-    {/* (resolve the error JSX expressions must have one parent element) */}
+      {/* Fragment: To include different elements */}
+      {/* (resolve the error JSX expressions must have one parent element) */}
       <Fragment>
         <Header />
 
@@ -44,6 +44,7 @@ function App() {
         </div>
 
       </Fragment>
+
     </Router>
   )
 }
