@@ -10,7 +10,7 @@ const Header = () => (
     // so we change it for className
     <header className="barra">
         <div className="contenedor">
-            <h1>CRM - Administrador de Clientes</h1>
+            <h1>CRM - Manage all your customers</h1>
         </div>
     </header>
     

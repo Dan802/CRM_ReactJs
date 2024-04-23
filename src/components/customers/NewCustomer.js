@@ -1,9 +1,11 @@
 import React, {Fragment, useState} from 'react'
 import Swal from 'sweetalert2'
-import { withRouter } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import clientAxios from '../../config/axios'
 
-function NewCustomer({history}) {
+function NewCustomer() {
+
+    const navigate = useNavigate();
 
     // customer = state
     // saveCustomer = function to save the state
@@ -24,8 +26,6 @@ function NewCustomer({history}) {
             // Add the new data
             [e.target.name] : e.target.value
         })
-
-        console.log(customer)
     }
 
     // validate form
@@ -58,17 +58,16 @@ function NewCustomer({history}) {
                       });
 
                 } else {
-                    console.log(res.data)
 
                     Swal.fire({
                         title: "You have added a new customer",
                         text: res.data.message,
-                        icon: "succes"
+                        icon: "success"
                       });
                 }
 
                 // Redirect
-                history.push('/')
+                navigate('/')
             })
     }
 
@@ -120,6 +119,4 @@ function NewCustomer({history}) {
     )
 }
 
-// higher order component
-// withRouter needs a component and return a new component
-export default withRouter(NewCustomer)
+export default NewCustomer

@@ -1,9 +1,11 @@
 import React, {Fragment, useState, useEffect} from 'react'
 import Swal from 'sweetalert2'
-import { withRouter } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import clientAxios from '../../config/axios'
 
-function EditCustomer(props) {
+function EditCustomer() {
+
+    const navigate = useNavigate();
 
     console.log('1. Inicializamos el state con un objeto de clientes vacio')
     // customer = state, 
@@ -37,7 +39,8 @@ function EditCustomer(props) {
     }, [])
 
     // Obtain Id Customer from URL
-    const { id } = props.match.params
+    // const { id } = props.match.params
+    const { id } = useParams()
 
     // API Query
     const queryAPI = async () => {
@@ -102,7 +105,7 @@ function EditCustomer(props) {
                 }
 
                 // Redirect
-                props.history.push('/')
+                navigate('/')
             })
     }
 
@@ -119,7 +122,7 @@ function EditCustomer(props) {
                     <label>Nombre:</label>
                     <input type="text" placeholder="Nombre Cliente" name="name"
                             onChange={handleOnChange}
-                            value={customer.name} />
+                            defaultValue={customer.name} />
                 </div>
 
                 <div className="campo">
@@ -160,6 +163,4 @@ function EditCustomer(props) {
     )
 }
 
-// higher order component
-// withRouter needs a component and return a new component
-export default withRouter(EditCustomer)
+export default EditCustomer

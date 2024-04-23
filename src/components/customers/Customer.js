@@ -19,10 +19,10 @@ function Customer({customer}) {
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete customer!"
-          }).then((result) => {
+          }).then(async (result) => {
             if (result.isConfirmed) {
 
-                clientAxios.delete(`/customers/${idCustomer}`)
+                await clientAxios.delete(`/customers/${idCustomer}`)
                     .then(res => {
                         console.log(res)
 
@@ -33,7 +33,9 @@ function Customer({customer}) {
                           });
                     })
 
-
+                //Reload page
+                // Todo: Should be with useEffect
+                window.location.reload();
             }
           });
     }

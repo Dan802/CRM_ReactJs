@@ -1,7 +1,7 @@
 import React, {Fragment} from "react";
 
 // Routing
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // layout
 import Header from "./components/layout/Header";
@@ -11,12 +11,16 @@ import Nav from "./components/layout/Nav"
 import Customers from "./components/customers/Customers";
 import NewCustomer from "./components/customers/NewCustomer"
 import EditCustomer from "./components/customers/EditCustomer";
+
 import Products from "./components/products/Products";
+import EditProduct from "./components/products/EditProduct";
+import NewProduct from "./components/products/NewProduct";
+
 import Orders from "./components/orders/Orders";
 
 function App() {
   return(
-    <Router>
+    <BrowserRouter>
 
       {/* Fragment: To include different elements */}
       {/* (resolve the error JSX expressions must have one parent element) */}
@@ -28,16 +32,18 @@ function App() {
 
           <main className="caja-contenido col-9">
 
-            <Switch>
-              <Route exact path="/" component={Customers} />
+            <Routes>
+              <Route exact path="/" element={< Customers />} />
 
-              <Route exact path="/customers/new" component={NewCustomer} />
-              <Route exact path="/customers/edit/:id" component={EditCustomer} />
+              <Route exact path="/customers/new" element={< NewCustomer />} />
+              <Route exact path="/customers/edit/:id" element={< EditCustomer />} />
 
-              <Route exact path="/products" component={Products} />
+              <Route exact path="/products" element={< Products />} />
+              <Route exact path="/products/new" element={< NewProduct />} />
+              <Route exact path="/products/edit/:id" element={< EditProduct />} />
 
-              <Route exact path="/orders" component={Orders} />
-            </Switch>
+              <Route exact path="/orders" element={< Orders />} />
+            </Routes>
 
           </main>
 
@@ -45,7 +51,7 @@ function App() {
 
       </Fragment>
 
-    </Router>
+    </BrowserRouter>
   )
 }
 
