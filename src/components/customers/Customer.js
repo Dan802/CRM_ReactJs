@@ -51,12 +51,18 @@ function Customer({customer}) {
             <div className="acciones">
                 <Link to={`/customers/edit/${_id}`}  className="btn btn-azul">
                     <i className="fas fa-pen-alt"></i>
-                    Editar Cliente
+                    Edit Customer
                 </Link>
+
+                <Link to={`/orders/new/${_id}`}  className="btn btn-amarillo">
+                    <i className="fas fa-plus"></i>
+                    New Order
+                </Link>
+
                 <button type="button" className="btn btn-rojo btn-eliminar"
                     onClick={() => onClickDeleteCustomer(_id)}>
                     <i className="fas fa-times"></i>
-                    Eliminar Cliente
+                    Delete Customer
                 </button>
             </div>
         </li>

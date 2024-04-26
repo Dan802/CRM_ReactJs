@@ -17,6 +17,7 @@ import EditProduct from "./components/products/EditProduct";
 import NewProduct from "./components/products/NewProduct";
 
 import Orders from "./components/orders/Orders";
+import NewOrder from "./components/orders/NewOrder";
 
 function App() {
   return(
@@ -43,6 +44,8 @@ function App() {
               <Route exact path="/products/edit/:id" element={< EditProduct />} />
 
               <Route exact path="/orders" element={< Orders />} />
+              <Route exact path="/orders/new/:id" element={< NewOrder />} />
+
             </Routes>
 
           </main>
