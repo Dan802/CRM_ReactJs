@@ -1,14 +1,21 @@
-import React, {useState, useEffect, Fragment} from 'react'
+import React, {useState, useEffect, useContext, Fragment} from 'react'
 import {useParams, useNavigate} from 'react-router-dom'
 import Swal from 'sweetalert2'
 import clientAxios from '../../config/axios'
 import FormSearchProduct from './FormSearchProduct'
 import FormAmountProduct from './FormAmountProduct'
 
+// import Context (return if the user is authetize with a json web token)
+import { CRMContext } from '../../context/CRMContext'
+
 function NewOrder () {
 
-    const { id : customerId } =  useParams()
     const navigate = useNavigate();
+    const { id : customerId } =  useParams()
+
+    // use context values
+    const [auth, setAuth] = useContext(CRMContext)
+    console.log(auth)
 
     // State
     const [customer, setCustomer] = useState({})
@@ -17,10 +24,22 @@ function NewOrder () {
     const [total, setTotal] = useState(0)
 
     useEffect(() => {
+
+        // Check if the user is authenticated
+        if(!auth.auth || localStorage.getItem('token') !== auth.token) {
+            // Redirect
+            navigate('/login')
+            return
+        }
+
         // get the customer
         const queryAPI = async() => {
             // get the actual customer
-            const result = await clientAxios.get(`/customers/${customerId}`)
+            const result = await clientAxios.get(`/customers/${customerId}`, {
+                headers: {
+                    Authorization : `Bearer ${auth.token}`
+                }
+            })
 
             setCustomer(result.data)
         }
@@ -35,7 +54,11 @@ function NewOrder () {
         e.preventDefault()
 
         // get the products based in the state search
-        const resultSearch = await clientAxios.post(`/products/search/${search}`)
+        const resultSearch = await clientAxios.post(`/products/search/${search}`, '', {
+            headers: {
+                Authorization : `Bearer ${auth.token}`
+            }
+        })
 
         if(resultSearch.data[0]) {
 
@@ -122,7 +145,11 @@ function NewOrder () {
             total
         }
 
-        const res = await clientAxios.post(`/orders/new/${customerId}`, order)
+        const res = await clientAxios.post(`/orders/new/${customerId}`, order, {
+            headers: {
+                Authorization : `Bearer ${auth.token}`
+            }
+        })
 
         if(res.status === 200) {
             Swal.fire({

@@ -5,16 +5,16 @@ export default function FormSearchProduct(props) {
     return (
 
         <form onSubmit={props.handleOnSubmit}>        
-                <legend>Busca un Producto y agrega una cantidad</legend>
+            <legend>Search and add any product</legend>
 
-                <div className="campo">
-                    <label>Products:</label>
-                    <input type="text" placeholder="Product's Name" name="products"
-                        onChange={props.handleOnChange}
-                    />
-                </div>
+            <div className="campo">
+                <label>Products:</label>
+                <input type="text" placeholder="Product's Name" name="products"
+                    onChange={props.handleOnChange}
+                />
+            </div>
 
-                <input type="submit" className='btn btn-azul btn-block' value="Search Product" />
-            </form>
+            <input type="submit" className='btn btn-azul btn-block' value="Search Product" />
+        </form>
     )
 }

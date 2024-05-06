@@ -1,14 +1,19 @@
-import React, {useState, useEffect, Fragment} from 'react'
+import React, {useState, useEffect, Fragment, useContext} from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import clientAxios from '../../config/axios'
 import Spinner from '../layout/Spinner'
 import Swal from 'sweetalert2'
 
+// import Context (return if the user is authetize with a json web token)
+import { CRMContext } from '../../context/CRMContext'
 
 const EditProduct = () => { 
 
     const navigate = useNavigate();
     const { id } = useParams()
+
+    // use context values
+    const [auth, setAuth] = useContext(CRMContext)
 
     // product = state
     // setProduct = function to save/update the state 
@@ -28,8 +33,19 @@ const EditProduct = () => {
     // when the component is loaded
     useEffect(() => {
 
+        // Check if the user is authenticated
+        if(!auth.auth || localStorage.getItem('token') !== auth.token) {
+            // Redirect
+            navigate('/login')
+            return
+        }
+
         const queryAPI = async () => {
-            const queryProduct = await clientAxios.get(`/products/${id}`)
+            const queryProduct = await clientAxios.get(`/products/${id}`, {
+                headers: {
+                    Authorization : `Bearer ${auth.token}`
+                }
+            })
     
             setProduct(queryProduct.data)
             setChecked(queryProduct.data.available)
@@ -53,7 +69,8 @@ const EditProduct = () => {
         try {
             const res = await clientAxios.put(`/products/${id}`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    Authorization : `Bearer ${auth.token}`
                 }
             })
 
@@ -102,7 +119,7 @@ const EditProduct = () => {
             <h2>Edit Product</h2>
 
             <form onSubmit={handleSubmit}>
-                <legend>Llena todos los campos</legend>
+                <legend>Fill out all fields</legend>
 
                 <div className="campo">
                     <label>Name:</label>

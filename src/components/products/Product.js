@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import clientAxios from '../../config/axios'
 
+// import Context (return if the user is authetize with a json web token)
+import { CRMContext } from '../../context/CRMContext';
+
 const Product = ({product}) => { 
+
+    // use context values
+    const [auth, setAuth] = useContext(CRMContext)
 
     const { _id, amount, available, image, name, price } = product
 
@@ -19,7 +25,11 @@ const Product = ({product}) => {
             confirmButtonText: "Yes, delete product!"
           }).then(async (result) => {
             if (result.isConfirmed) {
-                await clientAxios.delete(`/products/${id}`)
+                await clientAxios.delete(`/products/${id}`, {
+                    headers: {
+                        Authorization : `Bearer ${auth.token}`
+                    }
+                })
                     .then(res => {
                         console.log(res)
 

@@ -1,8 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Link } from "react-router-dom";
+import { CRMContext } from '../../context/CRMContext'
 
+const Nav = () => { 
 
-const nav = () => { 
+    const [auth, setAuth] = useContext(CRMContext)
+
+    if(!auth.auth) return null
+
     return(
         <aside className="sidebar col-3">
             <h2>Manage</h2>
@@ -16,4 +21,4 @@ const nav = () => {
     )
 }
 
-export default nav
+export default Nav

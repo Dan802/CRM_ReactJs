@@ -1,9 +1,12 @@
-/* eslint-disable no-unused-vars */
-import React, {useEffect, useState, Fragment} from 'react'
+import React, {useEffect, useState, useContext, Fragment} from 'react'
+import { useNavigate } from 'react-router-dom'
 import clientAxios from '../../config/axios'
 import { Link } from 'react-router-dom'
 import Customer from './Customer'
 import Spinner from '../layout/Spinner';
+
+// import Context (return if the user is authetize with a json web token)
+import { CRMContext } from '../../context/CRMContext';
 
 // This way is call React Hooks 
 const Customers = () => { 
@@ -13,22 +16,53 @@ const Customers = () => {
     // setCustomers = function to save the state
     const [customers, setCustomers] = useState([])
 
+    // use context values
+    const [auth, setAuth] = useContext(CRMContext)
+
+    const navigate = useNavigate();
 
     // use effect is similar to componentdidmount and willmount
     // it runs automatically when the user open the route file 
     // useEffect always should call a function/method apart 
     useEffect(() => {
 
-        
-        // We call the API (Query to API)
-        const queryAPI = async () => {
-            const customersQuery = await clientAxios.get('/customers')
-            
-            // add the result to the state
-            setCustomers(customersQuery.data)
+        // if the auth state === false 
+        if(auth.auth === false) {
+            // Redirect
+            navigate('/login')
+            return 
         }
-        
-        queryAPI()
+
+        // if there is no web json token the user haven't logged in yet
+        if(auth.token !== '') {
+
+            const queryAPI = async () => {
+                try {
+
+                    // We call the API (Query to API)
+                    const customersQuery = await clientAxios.get('/customers', {
+                        headers: {
+                            Authorization : `Bearer ${auth.token}`
+                        }
+                    })
+                    
+                    // add the result to the state
+                    setCustomers(customersQuery.data)
+                    
+                } catch (error) {
+                    // Error with authorization
+                    if(error.response.status === 500){
+                        // Redirect
+                        navigate('/login')
+                    }
+                }
+            }
+
+            queryAPI()
+        } else {
+            // Redirect
+            navigate('/login')
+        }
         
         // todo When customers state change (edit, delete...) runs again queryAPI()
     }, [/* customers */])
@@ -75,4 +109,4 @@ const Customers = () => {
     )
 }
 
- export default Customers
+export default Customers

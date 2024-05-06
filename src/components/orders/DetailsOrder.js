@@ -1,10 +1,16 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import Swal from 'sweetalert2'
 import clientAxios from '../../config/axios'
 
+// import Context (return if the user is authetize with a json web token)
+import { CRMContext } from '../../context/CRMContext';
+
 export default function DetailsOrder({order}) {
 
-    const {customer, total} = order
+    // use context values
+    const [auth, setAuth] = useContext(CRMContext)
+
+    const {_id, customer, order : miniOrder, total} = order
 
     const onClickDeleteOrder = idOrder => {
         console.log(idOrder)
@@ -20,7 +26,11 @@ export default function DetailsOrder({order}) {
           }).then(async (result) => {
             if (result.isConfirmed) {
 
-                await clientAxios.delete(`/orders/${idOrder}`)
+                await clientAxios.delete(`/orders/${idOrder}`, {
+                    headers: {
+                        Authorization : `Bearer ${auth.token}`
+                    }
+                })
                     .then(res => {
                         console.log(res)
 
@@ -48,28 +58,30 @@ export default function DetailsOrder({order}) {
     return(
         <li className="pedido">
             <div className="info-pedido">
-                <p className="id">ID: {order._id}</p>
-                <p className="nombre">Customer: {customer.name} {customer.secondName}</p>
+                <p className="id">ID: {_id}</p>
+                <p className="nombre">Customer: {customer?.name || 'Undefined'} {customer?.secondName}</p>
 
                 <div className="articulos-pedido">
                     <p className="productos">Order's Items: </p>
                     <ul>
-                        {order.order.map(item => (
-                            <li key={order._id + item.product._id}>
-                                <p>{item.product.name}</p>
-                                <p>Price: ${item.product.price}</p>
-                                <p>Amount: {item.amount}</p>
+                        {console.log(miniOrder)}
+                        {miniOrder.map(item => (
+                            <li key={_id + item.product?._id}>
+                                <p>Name: {item.product?.name || 'Undefined'}</p>
+                                <p>Price: {(item.product) ? '$' + item.product?.price : '-'}</p>
+                                <p>Amount: {(item.product) ? item.amount : '-'}</p>
                             </li>
                         ))}
                         
                     </ul>
                 </div>
-                <p className="total">Total: ${total}</p>
+                <p className="total">Total: {total}</p>
             </div>
             <div className="acciones">
-                <a href="edit" className="btn btn-azul">
+                <a href={`orders/edit/${_id}`} className="btn btn-azul">
                     <i className="fas fa-pen-alt"></i>
                     Edit Order
+                    {/* TODO Modulo para editar ordenes */}
                 </a>
 
                 <button type="button" className="btn btn-rojo btn-eliminar"

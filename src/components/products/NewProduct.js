@@ -1,11 +1,17 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import clientAxios from '../../config/axios'
 
+// import Context (return if the user is authetize with a json web token)
+import { CRMContext } from '../../context/CRMContext'
+
 const NewProduct = () => { 
 
     const navigate = useNavigate();
+
+    // use context values
+    const [auth, setAuth] = useContext(CRMContext)
     
     // product = state
     // setProduct = function to save/update the state 
@@ -20,6 +26,15 @@ const NewProduct = () => {
     // file = state
     // setFile = function to save/update the state 
     const [file, setFile] = useState('')
+
+    useEffect(() => {
+        // Check if the user is authenticated
+        if(!auth.auth || localStorage.getItem('token') !== auth.token) {
+            // Redirect
+            navigate('/login')
+            return
+        }
+    }, [])
     
     // read data form
     const handleOnChange = e => {
@@ -50,7 +65,8 @@ const NewProduct = () => {
         try {
             const res = await clientAxios.post('/products/', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    Authorization : `Bearer ${auth.token}`
                 }
             })
 
@@ -80,7 +96,7 @@ const NewProduct = () => {
             <h2>New Product</h2>
 
             <form onSubmit={handleSubmit}>
-                <legend>Llena todos los campos</legend>
+                <legend>Fill out all fields</legend>
 
                 <div className="campo">
                     <label>Name:</label>
@@ -121,4 +137,4 @@ const NewProduct = () => {
     )
 }
 
- export default NewProduct
+export default NewProduct

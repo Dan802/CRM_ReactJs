@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useContext} from "react";
 
 // Routing
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -19,41 +19,57 @@ import NewProduct from "./components/products/NewProduct";
 import Orders from "./components/orders/Orders";
 import NewOrder from "./components/orders/NewOrder";
 
+import Login from "./components/auth/Login";
+
+// Json Web Token to Authentication
+import {CRMContext, CRMProvider} from "./context/CRMContext"
+
+//* Looking for some notes? Start looking Customers, good job :')
+
 function App() {
+
+  // use context in the component
+  const [auth, setAuth] = useContext(CRMContext)
+
   return(
     <BrowserRouter>
 
       {/* Fragment: To include different elements */}
       {/* (resolve the error JSX expressions must have one parent element) */}
       <Fragment>
-        <Header />
 
-        <div className="grid contenedor contenido-principal">
-          <Nav />
+        <CRMProvider value={[auth, setAuth]}>
 
-          <main className="caja-contenido col-9">
+          <Header />
 
-            <Routes>
-              <Route exact path="/" element={< Customers />} />
+          <div className="grid contenedor contenido-principal">
+            <Nav />
 
-              <Route exact path="/customers/new" element={< NewCustomer />} />
-              <Route exact path="/customers/edit/:id" element={< EditCustomer />} />
+            <main className="caja-contenido col-9">
 
-              <Route exact path="/products" element={< Products />} />
-              <Route exact path="/products/new" element={< NewProduct />} />
-              <Route exact path="/products/edit/:id" element={< EditProduct />} />
+              <Routes>
+                <Route exact path="/" element={< Customers />} />
 
-              <Route exact path="/orders" element={< Orders />} />
-              <Route exact path="/orders/new/:id" element={< NewOrder />} />
+                <Route exact path="/customers/new" element={< NewCustomer />} />
+                <Route exact path="/customers/edit/:id" element={< EditCustomer />} />
 
-            </Routes>
+                <Route exact path="/products" element={< Products />} />
+                <Route exact path="/products/new" element={< NewProduct />} />
+                <Route exact path="/products/edit/:id" element={< EditProduct />} />
 
-          </main>
+                <Route exact path="/orders" element={< Orders />} />
+                <Route exact path="/orders/new/:id" element={< NewOrder />} />
 
-        </div>
+                <Route exact path="/login" element={< Login />} />
 
+              </Routes>
+
+            </main>
+
+          </div>
+
+        </CRMProvider>
       </Fragment>
-
     </BrowserRouter>
   )
 }

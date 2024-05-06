@@ -1,11 +1,17 @@
-import React, {Fragment, useState} from 'react'
+import React, {Fragment, useContext, useEffect, useState} from 'react'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 import clientAxios from '../../config/axios'
 
+// import Context (return if the user is authetize with a json web token)
+import { CRMContext } from '../../context/CRMContext';
+
 function NewCustomer() {
 
     const navigate = useNavigate();
+
+    // use context values
+    const [auth, setAuth] = useContext(CRMContext)
 
     // customer = state
     // saveCustomer = function to save the state
@@ -16,6 +22,14 @@ function NewCustomer() {
         email: '',
         cellphone: ''
     })
+
+    useEffect(() => {
+        // Check if the user is authenticated
+        if(!auth.auth || localStorage.getItem('token') !== auth.token) {
+            // Redirect
+            navigate('/login')
+        }
+    }, [])  
 
     // read form's data
     const updateState = e => {
@@ -44,7 +58,11 @@ function NewCustomer() {
         e.preventDefault()
 
         // Send request
-        clientAxios.post('/customers', customer)
+        clientAxios.post('/customers', customer, {
+            headers: {
+                Authorization : `Bearer ${auth.token}`
+            }
+        })
             .then(res => {
                 console.log(res)
 
@@ -77,7 +95,7 @@ function NewCustomer() {
             <h2>New Customer</h2>
 
             <form onSubmit={handleSubmit}>
-                <legend>Llena todos los campos</legend>
+                <legend>Fill out all fields</legend>
 
                 <div className="campo">
                     <label>Nombre:</label>

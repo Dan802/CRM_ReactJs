@@ -1,10 +1,16 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import clientAxios from '../../config/axios';
 
+// import Context (return if the user is authetize with a json web token)
+import { CRMContext } from '../../context/CRMContext';
+
 // we recieve and destructuring the props
 function Customer({customer}) {
+
+    // use context values
+    const [auth, setAuth] = useContext(CRMContext)
 
     // destructuring values
     const {_id, name, secondName, email, company, cellphone} = customer
@@ -22,7 +28,11 @@ function Customer({customer}) {
           }).then(async (result) => {
             if (result.isConfirmed) {
 
-                await clientAxios.delete(`/customers/${idCustomer}`)
+                await clientAxios.delete(`/customers/${idCustomer}`, {
+                    headers: {
+                        Authorization : `Bearer ${auth.token}`
+                    }
+                })
                     .then(res => {
                         console.log(res)
 

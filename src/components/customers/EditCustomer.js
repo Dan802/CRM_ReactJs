@@ -1,13 +1,18 @@
-import React, {Fragment, useState, useEffect} from 'react'
+import React, {Fragment, useState, useEffect, useContext} from 'react'
 import Swal from 'sweetalert2'
 import { useNavigate, useParams } from 'react-router-dom'
 import clientAxios from '../../config/axios'
+
+// import Context (return if the user is authetize with a json web token)
+import { CRMContext } from '../../context/CRMContext'
 
 function EditCustomer() {
 
     const navigate = useNavigate();
 
-    console.log('1. Inicializamos el state con un objeto de clientes vacio')
+    // use context values
+    const [auth, setAuth] = useContext(CRMContext)
+
     // customer = state, 
     // setCustomers = Function to save the state
     const [customer, setCustomers] = useState({
@@ -18,10 +23,21 @@ function EditCustomer() {
         cellphone: ''
     });
 
+    // useEffect, the first time the component load (maybe)
+    useEffect( () => {
+        // Check if the user is authenticated
+        if(!auth.auth || localStorage.getItem('token') !== auth.token) {
+            // Redirect
+            navigate('/login')
+            return
+        }
+
+        queryAPI()
+    }, [])
+
     // 2. Se llama esta función desde el HTML return 
     // validate form
     const validateCustomer = () => {
-        console.log('2. Desde validate Customer')
 
         // destructuring
         const {name, secondName, email, company, cellphone} = customer
@@ -32,25 +48,22 @@ function EditCustomer() {
         return isvalid
     }
 
-    // useEffect, the first time the component load (maybe)
-    useEffect( () => {
-        console.log('3. Desde useEffect')
-        queryAPI()
-    }, [])
-
     // Obtain Id Customer from URL
     // const { id } = props.match.params
     const { id } = useParams()
 
     // API Query
     const queryAPI = async () => {
-        console.log('4. Desde queryAPI')
         
         // add the previous data into the state
         // setCustomers(customerQuery.data) 
         // But that, remove non-existent keys, like the optional data for example, so...
 
-        const customerQuery = await clientAxios.get(`/customers/${id}`)
+        const customerQuery = await clientAxios.get(`/customers/${id}`, {
+            headers: {
+                Authorization : `Bearer ${auth.token}`
+            }
+        })
 
         const updatedCustomer = { ...customer };
 
@@ -59,14 +72,11 @@ function EditCustomer() {
             updatedCustomer[key] = customerQuery.data[key];
         });
 
-        console.log('setCustomers en queryAPI, rebooting...')
         setCustomers(updatedCustomer) // But this, remove non-existent keys, like phone customer for example, so...
     }
     
     // read form's data
     const handleOnChange = e => {
-        console.log('5. Desde handleOnChange')
-        console.log('setCustomers en handleOnChange, rebooting...')
         // save the user input into the state
         setCustomers({
             // Get a copy of the actual state
@@ -81,8 +91,11 @@ function EditCustomer() {
         e.preventDefault()
 
         // Send query through axios
-        console.log('7. Desde handleOnSubmit')
-        clientAxios.put(`/customers/${id}`, customer)
+        clientAxios.put(`/customers/${id}`, customer, {
+            headers: {
+                Authorization : `Bearer ${auth.token}`
+            }
+        })
             .then(res => {
                 console.log(res)
 
@@ -116,7 +129,7 @@ function EditCustomer() {
             <h2>Edit Customer</h2>
 
             <form onSubmit={handleSubmit}>
-                <legend>Llena todos los campos</legend>
+                <legend>Fill out all fields</legend>
 
                 <div className="campo">
                     <label>Nombre:</label>
