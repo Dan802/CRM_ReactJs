@@ -40,8 +40,11 @@ const CRMProvider = props => {
                             auth: true
                         })
 
-                        // redirect
-                        navigate('/')
+                        // ToDo open in the correct window
+                        // if(window.location.pathname === '/login'){
+                            // redirect
+                            navigate('/')
+                        // }
                     }
                     
                 } catch (error) {

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import {Link, useNavigate } from 'react-router-dom'
 import { CRMContext } from '../../context/CRMContext'
 
 const Header = () => {
@@ -25,7 +25,7 @@ const Header = () => {
         <header className="barra">
             <div className="contenedor">
                 <div className="contenido-barra">
-                    <h1>CRM - Manage all your customers</h1>
+                    <h1><Link to={"/"}>CRM - Manage all your customers</Link></h1>
 
                     {/* If the user is authenticate... */}
                     {auth.auth ? (

@@ -123,7 +123,7 @@ h2 {
     background-color: var(--azul);
     padding: 2rem 0;
 }
-.barra h1 {
+.barra h1 , .barra h1 a{
     margin:0;
     color: white;
 }
@@ -142,6 +142,7 @@ h2 {
     }
     .contenido-barra button {
         margin: 0;
+        border-radius: 1rem;
     }
 }
 .contenido-principal{

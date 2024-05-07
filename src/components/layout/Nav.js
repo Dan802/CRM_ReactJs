@@ -7,6 +7,7 @@ const Nav = () => {
     const [auth, setAuth] = useContext(CRMContext)
 
     if(!auth.auth) return null
+    if(window.location.pathname === '/login') return null
 
     return(
         <aside className="sidebar col-3">
