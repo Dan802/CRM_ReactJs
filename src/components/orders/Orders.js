@@ -3,6 +3,7 @@ import {  useNavigate } from 'react-router-dom'
 import clientAxios from '../../config/axios'
 import DetailsOrder from './DetailsOrder'
 import Swal from 'sweetalert2'
+import Spinner from '../layout/Spinner';
 
 // import Context (return if the user is authetize with a json web token)
 import { CRMContext } from '../../context/CRMContext';
@@ -56,33 +57,43 @@ const Orders = () => {
         queryAPI()
     }, [])
 
-    if(orders.length > 0) {
+    if(orders.length === 0) {
+        return(
+            <Fragment>
+
+                <h2>Orders</h2>
+
+                <Spinner />  
+            </Fragment>
+        ) 
+    }
+    
+    if(orders.message) { 
         return(
             <Fragment>
                 <h2>Orders</h2>
     
-                <ul className="listado-pedidos">
-                    {orders.map( order => (
-                        <DetailsOrder 
-                            key={order._id}
-                            order={order}
-                        />
-                    ))}
-                </ul>
+                <p>{orders.message}</p>
     
             </Fragment>
         )
     }
-    else { 
-        return(
-            <Fragment>
-                <h2>Orders</h2>
-    
-                <p>There are not orders avaible</p>
-    
-            </Fragment>
-        )
-    }
+
+    return(
+        <Fragment>
+            <h2>Orders</h2>
+
+            <ul className="listado-pedidos">
+                {orders.map( order => (
+                    <DetailsOrder 
+                        key={order._id}
+                        order={order}
+                    />
+                ))}
+            </ul>
+
+        </Fragment>
+    )
 }
 
 export default Orders

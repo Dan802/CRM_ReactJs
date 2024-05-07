@@ -33,40 +33,47 @@ const Customers = () => {
             return 
         }
 
-        // if there is no web json token the user haven't logged in yet
-        if(auth.token !== '') {
+        const queryAPI = async () => {
+            try {
 
-            const queryAPI = async () => {
-                try {
-
-                    // We call the API (Query to API)
-                    const customersQuery = await clientAxios.get('/customers', {
-                        headers: {
-                            Authorization : `Bearer ${auth.token}`
-                        }
-                    })
-                    
-                    // add the result to the state
-                    setCustomers(customersQuery.data)
-                    
-                } catch (error) {
-                    // Error with authorization
-                    if(error.response.status === 500){
-                        // Redirect
-                        navigate('/login')
+                // We call the API (Query to API)
+                const customersQuery = await clientAxios.get('/customers', {
+                    headers: {
+                        Authorization : `Bearer ${auth.token}`
                     }
+                })
+                
+                // add the result to the state
+                setCustomers(customersQuery.data)
+                
+            } catch (error) {
+                // Error with authorization
+                if(error.response.status === 500){
+                    // Redirect
+                    navigate('/login')
                 }
             }
-
-            queryAPI()
-        } else {
-            // Redirect
-            navigate('/login')
         }
+
+        queryAPI()
         
         // ToDo When customers state change (edit, delete...) runs again queryAPI()
     }, [/* customers */])
-    
+
+
+    if(customers.message) {
+        return(
+            <Fragment>
+                <h2>Customers</h2>
+
+                <Link to={"/customers/new"} className="btn btn-verde nvo-cliente"> 
+                    <i className="fas fa-plus-circle"></i> New Customer
+                </Link>
+
+                <p>{customers.message}</p>
+            </Fragment>
+        )
+    }
 
     // Spinner (Loading content animation)
     if(!customers.length){
@@ -83,6 +90,8 @@ const Customers = () => {
             </Fragment>
         )
     }
+
+    
 
     return(
         <Fragment>

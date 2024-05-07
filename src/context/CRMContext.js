@@ -20,7 +20,9 @@ const CRMProvider = props => {
 
     useEffect(() => {
 
-        if(token){
+        // if there is a token and auth.auth is false
+        // with this i think we dont make extra calls to the API
+        if(token && !auth.auth){
             const queryAPI = async () => {
                 try {
 
