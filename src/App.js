@@ -24,7 +24,7 @@ import Login from "./components/auth/Login";
 // Json Web Token to Authentication
 import {CRMContext, CRMProvider} from "./context/CRMContext"
 
-//* Looking for some notes? Start looking Customers, good job :')
+//* Looking for some notes? Start looking components/customers/customers.js, good job :')
 
 function App() {
 
@@ -75,4 +75,3 @@ function App() {
 }
 
 export default App
-

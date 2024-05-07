@@ -49,7 +49,7 @@ export default function DetailsOrder({order}) {
                     });
 
                 //Reload page
-                // Todo: Should be with useEffect
+                // ToDo: Should be with useEffect
                 window.location.reload();
             }
           });
@@ -81,7 +81,7 @@ export default function DetailsOrder({order}) {
                 <a href={`orders/edit/${_id}`} className="btn btn-azul">
                     <i className="fas fa-pen-alt"></i>
                     Edit Order
-                    {/* TODO Modulo para editar ordenes */}
+                    {/* ToDo Modulo para editar ordenes */}
                 </a>
 
                 <button type="button" className="btn btn-rojo btn-eliminar"

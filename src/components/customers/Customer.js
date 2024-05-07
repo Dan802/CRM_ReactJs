@@ -44,7 +44,7 @@ function Customer({customer}) {
                     })
 
                 //Reload page
-                // Todo: Should be with useEffect
+                // ToDo: Should be with useEffect
                 window.location.reload();
             }
           });

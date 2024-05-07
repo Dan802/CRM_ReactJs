@@ -64,7 +64,7 @@ const Customers = () => {
             navigate('/login')
         }
         
-        // todo When customers state change (edit, delete...) runs again queryAPI()
+        // ToDo When customers state change (edit, delete...) runs again queryAPI()
     }, [/* customers */])
     
 

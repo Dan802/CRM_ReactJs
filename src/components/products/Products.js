@@ -55,7 +55,7 @@ const Products = () => {
             navigate('/login')
         }
 
-        // todo When products state change (edit, delete...) runs again queryAPI()
+        // ToDo When products state change (edit, delete...) runs again queryAPI()
     }, [ /* products */ ])
 
     // Spinner (Loading content animation)
