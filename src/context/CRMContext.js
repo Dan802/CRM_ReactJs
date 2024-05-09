@@ -23,6 +23,7 @@ const CRMProvider = props => {
         // if there is a token and auth.auth is false
         // with this i think we dont make extra calls to the API
         if(token && !auth.auth){
+
             const queryAPI = async () => {
                 try {
 
@@ -32,31 +33,26 @@ const CRMProvider = props => {
                             Authorization : `Bearer ${token}`
                         }
                     })
+                    const message = await isValid.data.message
                     
                     // If the token is valid the user is authenticate
-                    if(isValid.data.message === true){
+                    if(message === true){
                         setAuth({
                             token,
                             auth: true
                         })
 
-                        // ToDo open in the correct window
-                        // if(window.location.pathname === '/login'){
-                            // redirect
-                            navigate('/')
-                        // }
+                        // ToDo redirect to the original site
+                        navigate('/')
                     }
                     
                 } catch (error) {
                     console.log(error)
                 }
             }
-
             queryAPI()
         }
-
     }, [])
-    
 
     return(
         <CRMContext.Provider

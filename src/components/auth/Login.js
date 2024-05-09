@@ -52,13 +52,23 @@ export default function Login() {
             
         } catch (error) {
             console.log(error)
-            
-            Swal.fire({
-                icon: 'error',
-                title: 'There was an error',
-                text: error.response?.data.message,
-                timer: 5000
-            })
+
+            // express result
+            if(error.response) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'There was an error',
+                    text: error.response?.data.message,
+                    timer: 5000
+                })
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'There was an error',
+                    text: 'There was an error, try again please',
+                    timer: 5000
+                })
+            }
         }
     }
 
