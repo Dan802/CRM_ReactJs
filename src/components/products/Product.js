@@ -55,7 +55,7 @@ const Product = ({product}) => {
                 <p className="precio">Amount: {amount}</p>
                 <p className="precio">{(available) ? 'In Stock': 'No Stock'}</p>
                 { image ? (
-                    <img src={`http://localhost:5000/${image}`} alt={`${name}`}
+                    <img src={`${process.env.REACT_APP_BACKEND_URL}/${image}`} alt={`${name}`}
                     style={{ height: "130px" }} />
                 ) : null }
             </div>

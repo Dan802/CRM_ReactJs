@@ -152,7 +152,7 @@ const EditProduct = () => {
                 <div className="campo">
                     <label>Image:</label>
                     
-                    { image ? (<img src={`http://localhost:5000/${image}`} alt={name} width="150px"></img>) : ''} 
+                    { image ? (<img src={`${process.env.REACT_APP_BACKEND_URL}/${image}`} alt={name} width="150px"></img>) : ''} 
     
                     <input type="file"  name="image" onChange={readFile} />
                 </div>
