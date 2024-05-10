@@ -75,7 +75,7 @@ export default function DetailsOrder({order}) {
                         
                     </ul>
                 </div>
-                <p className="total">Total: {total}</p>
+                <p className="total">Total: ${total}</p>
             </div>
             <div className="acciones">
                 <a href={`orders/edit/${_id}`} className="btn btn-azul">
