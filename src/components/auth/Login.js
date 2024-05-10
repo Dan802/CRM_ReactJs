@@ -25,11 +25,7 @@ export default function Login() {
         // authenticate the user
         try {
             // Return the token
-            const response = await clientAxios.post(`/log-in`, credentials, {
-                headers: {
-                    Authorization : `Bearer ${auth.token}`
-                }
-            })
+            const response = await clientAxios.post(`/log-in`, credentials)
             
             // get the token and add to localstorage
             const {token} = response.data
